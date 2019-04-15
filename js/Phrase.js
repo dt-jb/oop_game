@@ -16,7 +16,6 @@
    the letter CSS class for letters and the space CSS class for spaces.
    <li class="hide letter h">h</li>  */
    addPhraseToDisplay(){
-     //const phraseArr = [...this.phrase];
      for(let i = 0; i < this.phraseArray.length; i++){
        if(this.phraseArray[i] !== ' '){
          const $phraseLi =`<li class="hide letter ${this.phraseArray[i]}">${this.phraseArray[i]}</li>`;
@@ -49,38 +48,5 @@
          $('#phrase li')[i].classList.replace('hide', 'show');
        }
      }
-     /*
-     for(let i = 0; i < $('#phrase li').length; i++){
-       if($('#phrase ul li')[i].textContent === letter) {
-         $('#phrase ul li')[i].removeClass('hide');
-         $('#phrase ul li')[i].addClass('show');
-       }
-     }*/
-
-     //newGame.activePhrase.phraseArray.find(letter => $(event.target).text()=== letter).removeClass('hide');
-     //newGame.activePhrase.removeClass('hide').addClass('show');
-     //console.log(str);
-     /*
-     $('#phrase li').forEach(item => {
-       if(item.textContent === str) {
-         item.classList.replace('hide', 'show');
-       }
-     });
-     */
-
-     /*
-     const matcher = newGame.activePhrase.phraseArray[index];
-     $('#phrase li')
-      .filter(item => $(item).text() === matcher)
-      .map(item => item.classList.replace('hide', 'show'));
-        //matchedLetters.map(letter => letter.classList.replace('hide', 'show'));
-*/
-
-     //$('#phrase li')[index]
-     //arr.map(item => item.classList.replace('hide', 'show'));
-
-     //$('#phrase li')[index].classList.replace('hide', 'show');
-
-     //console.log($('#phrase li')[index]);
    }
  }

@@ -5,10 +5,8 @@
  // create a new instance of the Game class and add event listeners for the start button and onscreen keyboard buttons.
 const newGame = new Game();
 $("#btn__reset").on('click', () => {
-  //const newGame = new Game();
   newGame.startGame();
 });
-
 
 $('#qwerty').on('click', (event) => {
   if (event.target.matches('.key')) {
@@ -16,4 +14,11 @@ $('#qwerty').on('click', (event) => {
   }
 });
 
-//hello
+//keyup, keydown - add keyboard functionality
+/*
+$('#qwerty').on('click', (event) => {
+  if (event.target.matches('.key')) {
+    newGame.handleInteraction(event);
+  }
+});
+*/

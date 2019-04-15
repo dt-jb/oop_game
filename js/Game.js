@@ -15,10 +15,7 @@
    startGame(){
      $('#overlay').hide();
      this.activePhrase = new Phrase(this.getRandomPhrase());
-
-     //const newPhrase = new Phrase(this.activePhrase);
      this.activePhrase.addPhraseToDisplay();
-     //return newPhrase;
    }
 
    // this method randomly retrieves one of the phrases stored in the phrases array and returns it.
@@ -29,7 +26,6 @@
    handleInteraction(event){
   //Disable the selected letter’s onscreen keyboard button.
       $(event.target).attr('disabled', true);
-
   //If the phrase does not include the guessed letter, add the wrong CSS class
   //to the selected letter's keyboard button and call the removeLife() method.
       if(!newGame.activePhrase.phrase.includes($(event.target).text())){
@@ -50,24 +46,13 @@
 
    removeLife(){
      //liveHeart.png images with a lostHeart.png -- change the src
-     /*
-     for(let i = 0; i < $('img[src="images/liveHeart.png"]').length; i++){
-       $('img[src="images/liveHeart.png"]')[i].attr("src", "images/lostHeart.png");
-       break;
-     }
-     */
      if($('img[src="images/liveHeart.png"]').length > 0){
        $('img[src="images/liveHeart.png"]:first').attr("src", "images/lostHeart.png");
      }
-
      this.missed += 1;
      if(this.missed === 5){
        this.gameOver();
      }
-     /*
-     let $heartChange = $('img[src="images/liveHeart.png"]').find($(item) => $(item).attr("src", "images/lostHeart.png"));
-     $heartChange.attr
-     */
    }
 
    checkForWin(){
@@ -85,11 +70,35 @@ and replaces the overlay’s start CSS class with either the win or lose CSS cla
    gameOver(){
      $('#overlay').show();
      if(newGame.checkForWin()){
-       $('#game-over-message').addClass('win');
+
+       $('#game-over-message').attr('class', 'win');
        $('#game-over-message').text("Whoa, you like...won, man");
      } else {
-       $('#game-over-message').addClass('lose');
+       $('#game-over-message').attr('class', 'lose');
        $('#game-over-message').text("Bummer, better luck next time");
      }
+     this.reset();
+   }
+   /*gameboard needs to be reset so that clicking the "Start Game" button will successfully load a new game.
+-Remove all li elements from the Phrase ul element.
+-Enable all of the onscreen keyboard buttons and update each to use the key CSS class, and not use the chosen or wrong CSS classes.
+-Reset all of the heart images (i.e. the player's lives) in the scoreboard at the bottom of the gameboard to display the liveHeart.png image.*/
+   reset(){
+     $("#phrase ul").children().detach();
+     const chosen = document.getElementsByClassName('chosen');
+     const wrong = document.getElementsByClassName('wrong');
+     Array.from(chosen).forEach(item => {
+       item.setAttribute('class', 'key');
+       item.removeAttribute('disabled');
+     });
+     Array.from(wrong).forEach(item => {
+       item.setAttribute('class', 'key');
+       item.removeAttribute('disabled');
+     });
+     const hearts = $('img[alt="Heart Icon"]');
+     for (let i = 0; i < hearts.length; i++){
+       hearts[i].setAttribute('src', 'images/liveHeart.png');
+     }
+     this.missed = 0;
    }
  }
