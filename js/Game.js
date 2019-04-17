@@ -26,6 +26,8 @@
    handleInteraction(event){
   //Disable the selected letter’s onscreen keyboard button.
       $(event.target).attr('disabled', true);
+      //$(event.key).attr('disabled', true);
+
   //If the phrase does not include the guessed letter, add the wrong CSS class
   //to the selected letter's keyboard button and call the removeLife() method.
       if(!newGame.activePhrase.phrase.includes($(event.target).text())){
@@ -42,6 +44,28 @@
   /*If the phrase includes the guessed letter, add the chosen CSS class to the selected letter's keyboard button,
   call the showMatchedLetter() method on the phrase, and then call the checkForWin() method.
   If the player has won, call gameOver()*/
+   }
+   handleKeydown(event){
+  //Disable the selected letter’s onscreen keyboard button.
+      const keyArray = [...$('.key')];
+      const selectedKeys = [];
+      const filteredKeyArr = keyArray.filter(key => key.textContent === event.key && !key.hasAttribute('disabled'));
+
+      if(!newGame.activePhrase.phrase.includes($(filteredKeyArr).text())){
+        $(filteredKeyArr).addClass('wrong');
+        $(filteredKeyArr).attr('disabled', true);
+        selectedKeys.push(filteredKeyArr);
+        newGame.removeLife();
+      } else {
+        $(filteredKeyArr).addClass('chosen');
+        $(filteredKeyArr).attr('disabled', true);
+        newGame.activePhrase.checkLetter(event);
+        selectedKeys.push(filteredKeyArr);
+        newGame.checkForWin();
+        if(newGame.checkForWin()){
+          newGame.gameOver();
+        }
+      }
    }
 
    removeLife(){
@@ -70,10 +94,13 @@ and replaces the overlay’s start CSS class with either the win or lose CSS cla
    gameOver(){
      $('#overlay').show();
      if(newGame.checkForWin()){
-
+      // $('#overlay').slideDown( "bounce", { times: 3 }, "slow" );
+       //$('#overlay').hide().slideDown(2000);
        $('#game-over-message').attr('class', 'win');
        $('#game-over-message').text("Whoa, you like...won, man");
+
      } else {
+       //$('#overlay').hide().slideUp(2000);
        $('#game-over-message').attr('class', 'lose');
        $('#game-over-message').text("Bummer, better luck next time");
      }

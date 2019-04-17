@@ -31,7 +31,7 @@
    // checks to see if the letter selected by the player matches a letter in the phrase.
    checkLetter(event){
      newGame.activePhrase.phraseArray.forEach(letter => {
-       if($(event.target).text() === letter){
+       if($(event.target).text() === letter || event.key === letter){
          const index = newGame.activePhrase.phraseArray.indexOf(letter);
          newGame.activePhrase.showMatchedLetter(letter);
        }

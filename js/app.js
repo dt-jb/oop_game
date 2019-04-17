@@ -15,10 +15,20 @@ $('#qwerty').on('click', (event) => {
 });
 
 //keyup, keydown - add keyboard functionality
+$('body').on('keydown', (event) => {
+  if(event.keyCode >= 65 && event.keyCode <= 90) {
+    newGame.handleKeydown(event);
+  }
+  //console.log(Array.from($('button .key'))).filter(event.key => event.key);
+});
 /*
-$('#qwerty').on('click', (event) => {
+document.addEventListener('keydown', function(event){
+    console.log(event.key);
+});
+*/
+  /*
   if (event.target.matches('.key')) {
     newGame.handleInteraction(event);
   }
-});
-*/
+  */
+//});
