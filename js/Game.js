@@ -8,12 +8,12 @@
      this.phrases = ['do a barrel roll', 'cool beans', 'straight cash homie', 'howdy partner', 'welcome to the jungle'];
      this.activePhrase = null;
    }
-   /*hides the start screen overlay, calls the getRandomPhrase() method,
-   and sets the activePhrase property with the chosen phrase.
-   It also adds that phrase to the board by calling the addPhraseToDisplay()
-   method on the active Phrase object*/
+
+   /*starts the game by hiding the overlay and generating a new phrase,
+   and adding that phrase to the display*/
    startGame(){
      $('#overlay').hide();
+     $('#game-over-message').removeClass('lose');
      this.activePhrase = new Phrase(this.getRandomPhrase());
      this.activePhrase.addPhraseToDisplay();
    }
@@ -23,13 +23,13 @@
     return this.phrases[Math.floor(Math.random()*5)];
    }
 
+   /*handles onscreen keyboard interaction by determining if the letter is included in the phrase.
+   if it isn't, the button is colored appropriately and a life is removed.
+   if it is, the button is colored appropriately and checks if the game if won.
+   if the game is won, the game over method is called.*/
    handleInteraction(event){
-  //Disable the selected letter’s onscreen keyboard button.
       $(event.target).attr('disabled', true);
-      //$(event.key).attr('disabled', true);
 
-  //If the phrase does not include the guessed letter, add the wrong CSS class
-  //to the selected letter's keyboard button and call the removeLife() method.
       if(!newGame.activePhrase.phrase.includes($(event.target).text())){
         $(event.target).addClass('wrong');
         newGame.removeLife();
@@ -41,12 +41,12 @@
           newGame.gameOver();
         }
       }
-  /*If the phrase includes the guessed letter, add the chosen CSS class to the selected letter's keyboard button,
-  call the showMatchedLetter() method on the phrase, and then call the checkForWin() method.
-  If the player has won, call gameOver()*/
    }
+   /*handles physical keyboard interaction by determining if the letter pressed is included in the phrase.
+   if it isn't, the onscreen button corresponding to that key is colored appropriately and a life is removed.
+   if it is, the onscreen button corresponding to that key is colored appropriately and checks if the game if won.
+   if the game is won, the game over method is called.*/
    handleKeydown(event){
-  //Disable the selected letter’s onscreen keyboard button.
       const keyArray = [...$('.key')];
       const selectedKeys = [];
       const filteredKeyArr = keyArray.filter(key => key.textContent === event.key && !key.hasAttribute('disabled'));
@@ -68,8 +68,9 @@
       }
    }
 
+   /*removes one of the hearts (lives) on screen.  also increments the missed property and
+   calls the game over method accordingly*/
    removeLife(){
-     //liveHeart.png images with a lostHeart.png -- change the src
      if($('img[src="images/liveHeart.png"]').length > 0){
        $('img[src="images/liveHeart.png"]:first').attr("src", "images/lostHeart.png");
      }
@@ -79,8 +80,8 @@
      }
    }
 
+   //checks for a win by checking if any of the phrase letters are still hidden
    checkForWin(){
-     //return true or false
      if($('#phrase li').hasClass('hide')){
        return false;
      } else {
@@ -88,28 +89,20 @@
      }
    }
 
-/*this method displays the original start screen overlay, and depending on the outcome of the game,
-updates the overlay h1 element with a friendly win or loss message,
-and replaces the overlay’s start CSS class with either the win or lose CSS class.*/
+/*depending on how the game ends the overlay screen is displayed with a win or lose message and calls reset()*/
    gameOver(){
-     $('#overlay').show();
      if(newGame.checkForWin()){
-      // $('#overlay').slideDown( "bounce", { times: 3 }, "slow" );
-       //$('#overlay').hide().slideDown(2000);
-       $('#game-over-message').attr('class', 'win');
-       $('#game-over-message').text("Whoa, you like...won, man");
+       $('#overlay').css('backgroundColor', '#78CF82').slideDown(1250);
+       $('#game-over-message').attr('class', 'win').text("For the WIN!");
 
      } else {
-       //$('#overlay').hide().slideUp(2000);
-       $('#game-over-message').attr('class', 'lose');
-       $('#game-over-message').text("Bummer, better luck next time");
+       $('#overlay').css('backgroundColor', '#D94545').slideDown(1250);
+       $('#game-over-message').attr('class', 'lose').text("Bummer, try again!");
      }
      this.reset();
    }
-   /*gameboard needs to be reset so that clicking the "Start Game" button will successfully load a new game.
--Remove all li elements from the Phrase ul element.
--Enable all of the onscreen keyboard buttons and update each to use the key CSS class, and not use the chosen or wrong CSS classes.
--Reset all of the heart images (i.e. the player's lives) in the scoreboard at the bottom of the gameboard to display the liveHeart.png image.*/
+
+   /*resets the board in preparation for a new game*/
    reset(){
      $("#phrase ul").children().detach();
      const chosen = document.getElementsByClassName('chosen');
